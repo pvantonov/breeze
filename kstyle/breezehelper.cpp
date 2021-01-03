@@ -683,23 +683,23 @@ namespace Breeze
         if( outline.isValid() )
         {
 
-            QLinearGradient gradient( frameRect.topLeft(), frameRect.bottomLeft() );
-            gradient.setColorAt( 0, outline.lighter( hasFocus ? 103:101 ) );
-            gradient.setColorAt( 1, outline.darker( hasFocus ? 110:103 ) );
-            painter->setPen( QPen( QBrush( gradient ), 1.0 ) );
+            renderFrame(painter, rect, color, outline, hasFocus ? FrameHint::DoubleRing : FrameHint::None );
 
             frameRect = strokedRect( frameRect );
+            frameRect.adjust(1, 1, -1, -1);
             radius = frameRadiusForNewPenWidth( radius, PenWidth::Frame );
 
-        } else painter->setPen( Qt::NoPen );
+        }
+
+        painter->setPen( Qt::NoPen );
 
         // content
         if( color.isValid() )
         {
 
             QLinearGradient gradient( frameRect.topLeft(), frameRect.bottomLeft() );
-            gradient.setColorAt( 0, color.lighter( hasFocus ? 103:101 ) );
-            gradient.setColorAt( 1, color.darker( hasFocus ? 110:103 ) );
+            gradient.setColorAt( 0, color.lighter( 101 ) );
+            gradient.setColorAt( 1, color.darker( 103 ) );
             painter->setBrush( gradient );
 
         } else painter->setBrush( Qt::NoBrush );
