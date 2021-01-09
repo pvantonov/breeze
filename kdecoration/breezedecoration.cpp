@@ -541,6 +541,53 @@ namespace Breeze
 
     }
 
+    QColor alphaBlend(const QColor &foreground, const QColor &background) {
+        const auto foregroundAlpha = foreground.alphaF();
+        const auto inverseForegroundAlpha = 1.0 - foregroundAlpha;
+        const auto backgroundAlpha = background.alphaF();
+
+        if (foregroundAlpha == 0.0) {
+            return background;
+        }
+
+        if (backgroundAlpha == 1.0) {
+            return QColor::fromRgb(
+                (foregroundAlpha*foreground.red()) + (inverseForegroundAlpha*background.red()),
+                (foregroundAlpha*foreground.green()) + (inverseForegroundAlpha*background.green()),
+                (foregroundAlpha*foreground.blue()) + (inverseForegroundAlpha*background.blue()),
+                0xff
+            );
+        } else {
+            const auto inverseBackgroundAlpha = (backgroundAlpha * inverseForegroundAlpha);
+            const auto finalAlpha = foregroundAlpha + inverseBackgroundAlpha;
+            Q_ASSERT(finalAlpha != 0.0);
+
+            return QColor::fromRgb(
+                (foregroundAlpha*foreground.red()) + (inverseBackgroundAlpha*background.red()),
+                (foregroundAlpha*foreground.green()) + (inverseBackgroundAlpha*background.green()),
+                (foregroundAlpha*foreground.blue()) + (inverseBackgroundAlpha*background.blue()),
+                finalAlpha
+            );
+        }
+    }
+
+    QColor Decoration::borderColour() const
+    {
+        auto c = client().data();
+
+        auto titlebarColour = c->color(ColorGroup::Active, ColorRole::TitleBar);
+
+        auto colour = c->color(ColorGroup::Active, ColorRole::Foreground);
+        colour.setAlphaF(0.75);
+        colour = alphaBlend(colour, titlebarColour);
+
+        if (!c->isActive()) {
+            colour.setAlphaF(0.25);
+        }
+
+        return colour;
+    }
+
     //________________________________________________________________
     void Decoration::paint(QPainter *painter, const QRect &repaintRegion)
     {
@@ -819,7 +866,7 @@ namespace Breeze
               Metrics::Frame_FrameRadius + 0.5);
 
           // Draw outline.
-          painter.setPen(withOpacity(internalSettings->shadowColor(), 0.2 * strength));
+          painter.setPen(borderColour());
           painter.setBrush(Qt::NoBrush);
           painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
           painter.drawRoundedRect(
