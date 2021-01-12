@@ -142,6 +142,7 @@ namespace Breeze
         //* active state change opacity
         qreal m_opacity = 0;
         qreal m_shadowOpacity = 0;
+        qreal m_devicePixelRatio = 1.0;
 
     };
 

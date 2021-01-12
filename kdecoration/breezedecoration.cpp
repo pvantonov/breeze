@@ -595,6 +595,11 @@ namespace Breeze
         auto c = client().data();
         auto s = settings();
 
+        if (painter->device()->devicePixelRatioF() != m_devicePixelRatio) {
+            m_devicePixelRatio = painter->device()->devicePixelRatioF();
+            updateShadow();
+        }
+
         // paint background
         if( !c->isShaded() )
         {
@@ -831,7 +836,7 @@ namespace Breeze
           BoxShadowRenderer shadowRenderer;
           shadowRenderer.setBorderRadius(Metrics::Frame_FrameRadius + 0.5);
           shadowRenderer.setBoxSize(boxSize);
-          shadowRenderer.setDevicePixelRatio(1.0); // TODO: Create HiDPI shadows?
+          shadowRenderer.setDevicePixelRatio(m_devicePixelRatio);
 
           const qreal strength = internalSettings->shadowStrength() / 255.0 * strengthScale;
           shadowRenderer.addShadow(params.shadow1.offset, params.shadow1.radius,
