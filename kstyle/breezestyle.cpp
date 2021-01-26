@@ -4767,7 +4767,7 @@ namespace Breeze
         // define relevant rectangles
         // checkbox
         QRect checkBoxRect;
-        if( menuItemOption->menuHasCheckableItems )
+        if( menuItemOption->checkType != QStyleOptionMenuItem::NotCheckable )
         {
             checkBoxRect = QRect( contentsRect.left(), contentsRect.top() + (contentsRect.height()-Metrics::CheckBox_Size)/2, Metrics::CheckBox_Size, Metrics::CheckBox_Size );
             contentsRect.setLeft( checkBoxRect.right() + Metrics::MenuItem_ItemSpacing + 1 );
