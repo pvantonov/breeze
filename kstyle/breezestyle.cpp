@@ -4711,9 +4711,9 @@ namespace Breeze
                 if( StyleConfigData::menuOpacity() < 100 ) 
                 {
                     color = _helper->alphaColor( palette.color( QPalette::WindowText ), 0.25 ) ;
-                    // don`t overlap with menu border
-                    copy.adjust( 1, 0, -1, 0 );
                 }
+                // don`t overlap with menu border
+                copy.adjust( 1, 0, -1, 0 );
                 
                 _helper->renderSeparator( painter, copy, color );
                 return true;
@@ -4725,6 +4725,8 @@ namespace Breeze
                  * in that case they are rendered as menu title buttons
                  */
                 QStyleOptionToolButton copy( separatorMenuItemOption( menuItemOption, widget ) );
+                // don`t overlap with menu border
+                copy->rect.adjust( 1, 0, -1, 0 );                
                 renderMenuTitle( &copy, painter, widget );
 
                 return true;
@@ -4748,6 +4750,9 @@ namespace Breeze
             const auto color = _helper->focusColor( palette );
             const auto outlineColor = _helper->focusOutlineColor( palette );
 
+            // don`t overlap with menu border
+            rect.adjust( 1, 0, -1, 0 );
+            
             Sides sides = nullptr;
             if( !menuItemOption->menuRect.isNull() )
             {
