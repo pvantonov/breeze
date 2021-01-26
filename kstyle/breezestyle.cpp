@@ -2795,10 +2795,10 @@ namespace Breeze
                 int leftColumnWidth = 0;
 
                 // add checkbox indicator width
-                if( menuItemOption->menuHasCheckableItems )
+                if( menuItemOption->checkType != QStyleOptionMenuItem::NotCheckable )
                 { leftColumnWidth += Metrics::CheckBox_Size + Metrics::MenuItem_ItemSpacing; }
                 // add icon width
-                else if( iconWidth > 0 )
+                else if( iconWidth > 0)
                 { leftColumnWidth += iconWidth + Metrics::MenuItem_ItemSpacing; }
 
                 // add spacing for accelerator
@@ -4802,7 +4802,7 @@ namespace Breeze
 
         // icon
         int iconWidth = 0;
-        const bool showIcon( showIconsInMenuItems() && !menuItemOption->menuHasCheckableItems);
+        const bool showIcon( showIconsInMenuItems() && menuItemOption->checkType == QStyleOptionMenuItem::NotCheckable);
         if( showIcon ) iconWidth = isQtQuickControl( option, widget ) ? qMax( pixelMetric(PM_SmallIconSize, option, widget ), menuItemOption->maxIconWidth ) : menuItemOption->maxIconWidth;
 
         QRect iconRect;
